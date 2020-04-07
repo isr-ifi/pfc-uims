@@ -1,28 +1,28 @@
-import React from "react";
-import Home from "./pages/home/home";
-import SetComponents from "./pages/set_components/set_components";
-import CreateDecisionCard from "./pages/create_decision_cards/create_decision_card";
-import ArrangeComponents from "./pages/arrange_components/arrange_components";
-import {
-    BrowserRouter as Router,
-    Route,
-    Link, Switch
-} from "react-router-dom";
-import "./webpage.css"
+import './webpage.css';
+
+import { faClone, faCog, faHome, faTh } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
+import Menu from 'react-burger-menu/lib/menus/slide';
+import { IconContext } from 'react-icons';
+import { useDispatch } from 'react-redux';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
-import Menu from 'react-burger-menu/lib/menus/slide'
-import {FaHome, FaCog, FaToolbox, FaTh} from "react-icons/fa";
-import { IconContext } from "react-icons";
-import {icon, text} from "@fortawesome/fontawesome-svg-core";
-import {faClone, faCog, faEnvelopeOpenText, faHome, faTh, faToolbox} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Logo from "./images/logo_nfp73_en.png";
-import GeneralSettings from "./pages/settings/general_settings";
-import {useSelector, useDispatch} from "react-redux";
-import {updateCarbonEmissionArea, updateCarbonGauge, updateGenericRolls, updateGenericValue, updateGenericTimeseries, updateRollspecificGoals} from "./actions";
-// import history from './history';
-//import './gitclone/src/actions/index'
-// Import Redux
+
+import {
+    updateCarbonEmissionArea,
+    updateCarbonGauge,
+    updateGenericRolls,
+    updateGenericTimeseries,
+    updateGenericValue,
+    updateRollspecificGoals,
+} from './actions';
+import Logo from './images/logo_nfp73_en.png';
+import ArrangeComponents from './pages/arrange_components/arrange_components';
+import CreateDecisionCard from './pages/create_decision_cards/create_decision_card';
+import Home from './pages/home/home';
+import SetComponents from './pages/set_components/set_components';
+import GeneralSettings from './pages/settings/general_settings';
 
 const Main = styled.main`
     position: relative;

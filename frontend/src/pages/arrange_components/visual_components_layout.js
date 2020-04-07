@@ -1,33 +1,23 @@
-import React, {Suspense} from "react";
-import _ from "lodash";
-import RGL, { WidthProvider } from "react-grid-layout";
-import "./visual_components_layout.css"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCompressArrowsAlt, faExpandArrowsAlt, faToolbox} from "@fortawesome/free-solid-svg-icons";
-import { withRouter } from 'react-router-dom';
-import {ToolBox, ToolBoxItem} from "./toolbox";
-import axios from "axios";
-import {confirmAlert} from "react-confirm-alert";
+import '../../pages.css';
+import './visual_components_layout.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import "../../pages.css"
-import Grid from "@material-ui/core/Grid";
-import Loadable from "react-loadable";
-//import { Container, Row, Col } from 'react-grid-system';
-//import PreviewVisualComponents from "./preview_visual_components";
-//import {Link, BrowserRouter as Router, Route, Switch} from "react-router-dom";
-//import Home from "../home/home";
-//import { Button } from 'reactstrap';
-//import {IconContext} from "react-icons";
-//import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
-//import parse from 'html-react-parser';
-// import { Responsive, WidthProvider } from "react-grid-layout";
-//import PropTypes from "prop-types";
+
+import { faCompressArrowsAlt, faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Grid from '@material-ui/core/Grid';
+import axios from 'axios';
+import _ from 'lodash';
+import React, { Suspense } from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import RGL, { WidthProvider } from 'react-grid-layout';
+import Loadable from 'react-loadable';
+import { withRouter } from 'react-router-dom';
+
+import { ToolBox } from './toolbox';
 
 require('dotenv').config();
 
-// const ResponsiveReactGridLayout = WidthProvider(Responsive);
 const ResponsiveReactGridLayout = WidthProvider(RGL);
-
 
 class VisualComponentsLayout extends React.PureComponent {
     constructor(props) {
@@ -35,7 +25,6 @@ class VisualComponentsLayout extends React.PureComponent {
 
         let layout;
         let toolbox;
-        let componentFilenameList;
 
         if (localStorage.getItem('SelectedLayout')){
             layout = JSON.parse(localStorage.getItem('SelectedLayout'));
@@ -77,7 +66,6 @@ class VisualComponentsLayout extends React.PureComponent {
             let toolboxObject = JSON.parse(localStorage.getItem("toolbox"));
             this.setState({toolbox: toolboxObject});
         }
-        //this.getLocalGitRepoPath();
     }
 
     /**
@@ -100,7 +88,6 @@ class VisualComponentsLayout extends React.PureComponent {
      * @returns {*} HTML code
      */
     generateVisualComponents() {
-        var VisComponentName = "";
         let components = {};
         if (localStorage.getItem("checkedComponents")) {
             const compList = JSON.parse(localStorage.getItem("checkedComponents"));
@@ -122,7 +109,7 @@ class VisualComponentsLayout extends React.PureComponent {
                 const visCompName = JSON.parse(localStorage.getItem("apiResponse")).componentsParameters[compIndex].name;
                 let finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
                 const finalOutputComps = finalOutput.configuration['1'].components;
-                finalOutputComps.map(v => {
+                finalOutputComps.forEach(v => {
                     if (v.name === visCompName) {
                         v.position = {
                             width: parseInt(l.w, 10), height: parseInt(l.h, 10),
@@ -136,7 +123,7 @@ class VisualComponentsLayout extends React.PureComponent {
                 // create dynamic props from parameters
                 const visCompParameters = finalOutput.configuration['1'].components[compIndex].parameter;
                 let dynamicProps = {};
-                visCompParameters.map(parameter => {
+                visCompParameters.forEach(parameter => {
                     let value = '';
                     let dependent = false;
                     if (parameter.value) {
@@ -194,14 +181,11 @@ class VisualComponentsLayout extends React.PureComponent {
                         dynamicProps[parameter.parameter] = value;
                     }
                 });
-                //let dynamicProps = {"width":1000, "breakpoint":5000, position:'bottom'};
 
                 if (""+ currentFileName !== "undefined") {
-                    //const CurrentComponent = React.lazy(() => import("../../gitclone/" + currentFileName));
-
                     const CurrentComponent = Loadable({
                         loader: () => import("./gitclone/" + currentFileName),
-                        loading: Loading //() => <div>Loading...</div>
+                        loading: Loading
                     });
 
                     if (Object.keys(dynamicProps) !== 0) {
@@ -217,16 +201,12 @@ class VisualComponentsLayout extends React.PureComponent {
                             </div>
                         }
 
-                        let datagrid = { w: l.w, h: l.h, x: l.x, y: l.y };
-
                         return (
                             <div key={l.i} data-grid={{ w: l.w, h: l.h, x: l.x, y: l.y }}>
                                 {toolboxButton}
                                 <div>
                                     <ErrorBoundary>
-                                        {/*<Suspense fallback={<div>Loading...</div>}>*/}
                                         <CurrentComponent {...dynamicProps}/>
-                                        {/*</Suspense>*/}
                                     </ErrorBoundary>
                                 </div>
                             </div>
@@ -292,7 +272,7 @@ class VisualComponentsLayout extends React.PureComponent {
         const visCompName = JSON.parse(localStorage.getItem("apiResponse")).componentsParameters[parseInt(item.i, 10)].name;
         let finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
         const finalOutputComps = finalOutput.configuration["1"].components;
-        finalOutputComps.map(v => {
+        finalOutputComps.forEach(v => {
             if (v.name === visCompName) {
                 v.toolbox = false;
             }
@@ -330,7 +310,7 @@ class VisualComponentsLayout extends React.PureComponent {
         const visCompName = JSON.parse(localStorage.getItem("apiResponse")).componentsParameters[parseInt(item.i, 10)].name;
         let finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
         const finalOutputComps = finalOutput.configuration["1"].components;
-        finalOutputComps.map(v => {
+        finalOutputComps.forEach(v => {
             if (v.name === visCompName) {
                 v.toolbox = true;
             }
@@ -360,7 +340,7 @@ class VisualComponentsLayout extends React.PureComponent {
      */
     onLayoutChange(layout) {
         let layouts = {lg: layout};
-        layout.map(item => {
+        layout.forEach(item => {
             if (item.i === "null") {
                 layouts = this.state.layouts
             }
@@ -420,8 +400,6 @@ class VisualComponentsLayout extends React.PureComponent {
             json_input,
             {headers: {'Content-Type': 'application/json'}})
             .then(response => {
-                //console.log(response.data);
-                //alert('Settings have been saved!')
                 if (response.data) {
                     this.showMessage("Success!", "All your settings have been saved!");
                 }
@@ -535,7 +513,6 @@ VisualComponentsLayout.defaultProps = {
     className: "layout",
     rowHeight: 30,
     onLayoutChange: function() {},
-    //cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
     cols: 12,
     verticalCompact: false,
 };

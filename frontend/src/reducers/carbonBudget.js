@@ -42,8 +42,6 @@ const carbonBudgetReducer = (state = initialState, action) => {
 
         case 'CARBON_EMISSION_UPDATE':
 
-            var id                              = action.payload.id;
-
             // Update state if id exists
             // -------------------------
             if (state.hasOwnProperty(id)) {

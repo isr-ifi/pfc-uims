@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export default class CheckboxList extends React.Component {
     constructor(props) {
@@ -8,12 +8,13 @@ export default class CheckboxList extends React.Component {
         if (props.input === "comp") {
             if (localStorage.getItem("visualComponents")) {
                 let json = JSON.parse(localStorage.getItem("visualComponents"));
-                Object.keys(json).map((e, i) => {
+                Object.keys(json).forEach((e, i) => {
                     this.state[e] = json[e];
                 });
             }
             else {
-                props.values.map((v, i) => {
+                props.values.forEach((v, i) => {
+                    // eslint-disable-next-line
                     this.state[v] = false
                 });
             }
@@ -21,18 +22,20 @@ export default class CheckboxList extends React.Component {
         else if (props.input === "dc") {
             if (localStorage.getItem("decisionCards")) {
                 let json = JSON.parse(localStorage.getItem("decisionCards"));
-                Object.keys(json).map((e, i) => {
+                Object.keys(json).forEach((e, i) => {
                     this.state[e] = json[e];
                 });
             }
             else {
-                props.values.map((v, i) => {
+                props.values.forEach((v, i) => {
+                    // eslint-disable-next-line
                     this.state[v] = false
                 });
             }
         }
         else {
-            props.values.map((v, i) => {
+            props.values.forEach((v, i) => {
+            // eslint-disable-next-line
             this.state[v] = false
             });
         }
