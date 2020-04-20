@@ -5,6 +5,7 @@ import git
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
+from pathlib import Path
 
 from .configuration_controller import Controller, get_model_names, get_value_from_data_json
 import os
@@ -58,12 +59,12 @@ def clone_git_repo_and_store_path_in_database(git_repo_address, database, local_
     """
     try:
         controller = Controller(git_repo_address,
-                                os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_repo_path_env_string))
+                                Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_repo_path_env_string)))
         controller.create_git_repo()
     except (git.exc.GitCommandError, TypeError):
         # recreate lost gitclone folder
         try:
-            os.mkdir(os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_repo_path_env_string))
+            os.mkdir(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_repo_path_env_string)))
         except FileExistsError:
             pass
         enterGitRepoAddressIntoDatabase(database, None)
@@ -75,7 +76,7 @@ def clone_git_repo_and_store_path_in_database(git_repo_address, database, local_
     else:
         # recreate lost gitclone folder
         try:
-            os.mkdir(os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_repo_path_env_string))
+            os.mkdir(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_repo_path_env_string)))
         except FileExistsError:
             pass
         enterGitRepoAddressIntoDatabase(database, None)
@@ -133,13 +134,12 @@ def extract_visual_component_and_decision_cards_information_from_git_repo(local_
     # if not get_git_repo_address() == "":
     #     git_repo_address = get_git_repo_address()
     try:
-        controller = Controller(git_repo_address,
-                                 os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_repo_path_env_string))
+        controller = Controller(git_repo_address, Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_repo_path_env_string)))
         settings_info = controller.get_configuration_settings_input()
     except (git.exc.GitCommandError, TypeError):
         # recreate lost gitclone folder
         try:
-            os.mkdir(os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_repo_path_env_string))
+            os.mkdir(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_repo_path_env_string)))
         except FileExistsError:
             pass
         return {"input": {}}
@@ -174,8 +174,7 @@ class PullFromRemoteGit(Resource):
         if not get_git_repo_address(database) == "":
             git_repo_address = get_git_repo_address(database)
             try:
-                controller = Controller(git_repo_address,
-                                        os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH"))
+                controller = Controller(git_repo_address, Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH")))
 
                 # if git repo gets updated, erase previous settings form database
                 # erase previous settings form database
@@ -186,7 +185,7 @@ class PullFromRemoteGit(Resource):
             except (git.exc.GitCommandError, TypeError):
                 # recreate lost gitclone folder
                 try:
-                    os.mkdir(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH"))
+                    os.mkdir(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH")))
                 except FileExistsError:
                     pass
                 return {"success": False}
@@ -218,13 +217,12 @@ class NewPullAvailable(Resource):
         if not get_git_repo_address(database) == "":
             git_repo_address = get_git_repo_address(database)
             try:
-                controller = Controller(git_repo_address,
-                                        os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH"))
+                controller = Controller(git_repo_address, Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH")))
                 controller.create_git_repo()
             except (git.exc.GitCommandError, TypeError):
                 # recreate lost gitclone folder
                 try:
-                    os.mkdir(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH"))
+                    os.mkdir(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH")))
                 except FileExistsError:
                     return {"pull": False}
                 return {"pull": False}
@@ -234,7 +232,7 @@ class NewPullAvailable(Resource):
             else:
                 # recreate lost gitclone folder
                 try:
-                    os.mkdir(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH"))
+                    os.mkdir(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH")))
                 except FileExistsError:
                     return {"pull": False}
                 return {"pull": False}
@@ -277,14 +275,13 @@ class FileNames(Resource):
         database = get_db()
         git_repo_address = get_git_repo_address(database)
         try:
-            controller = Controller(git_repo_address,
-                                    os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH"))
+            controller = Controller(git_repo_address, Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH")))
             filenames = controller.get_file_names()
             return filenames
         except (git.exc.GitCommandError, TypeError):
             # recreate lost gitclone folder
             try:
-                os.mkdir(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH"))
+                os.mkdir(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH")))
             except FileExistsError:
                 pass
             return []

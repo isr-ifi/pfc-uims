@@ -1,5 +1,6 @@
 import os
 import sqlite3
+from pathlib import Path
 
 import click
 from flask import current_app, g
@@ -34,8 +35,8 @@ def get_db_for_flask():
 
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect(
-            ROOT_DIR + "/backend/instance/configuration-system.sqlite")
+        g.db = sqlite3.connect(Path(os.path.dirname(os.path.abspath(__file__)) +
+                                    '../../instance/configuration-system.sqlite'))
         g.db.row_factory = sqlite3.Row
 
     return g.db

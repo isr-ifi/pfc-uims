@@ -7,6 +7,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from flask import g
+from pathlib import Path
 
 from .controller import Controller
 import os
@@ -42,10 +43,10 @@ class CloneGitRepoForTestcaseUI(Resource):
             if not get_git_repo_address() == "":
                 git_repo_address = get_git_repo_address()
                 try:
-                    controller = Controller(git_repo_address, os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE"))
+                    controller = Controller(git_repo_address, Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE")))
                     if not controller.git_repo_created:
                         try:
-                            os.mkdir(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE"))
+                            os.mkdir(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE")))
                         except FileExistsError:
                             pass
                         return {"success": False}
@@ -55,7 +56,7 @@ class CloneGitRepoForTestcaseUI(Resource):
                 except (git.exc.GitCommandError, TypeError, FileNotFoundError):
                     # recreate lost gitclone folder
                     try:
-                        os.mkdir(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE"))
+                        os.mkdir(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE")))
                     except FileExistsError:
                         pass
                     return {"success": False}
@@ -90,11 +91,11 @@ class FileNames(Resource):
     def get(self):
         try:
             git_repo_address = get_git_repo_address()
-            controller = Controller(git_repo_address, os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE"))
+            controller = Controller(git_repo_address, Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE")))
             if not controller.git_repo_created:
                 # recreate lost gitclone folder
                 try:
-                    os.mkdir(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE"))
+                    os.mkdir(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE")))
                 except FileExistsError:
                     pass
             filenames = controller.get_file_names()
@@ -102,7 +103,7 @@ class FileNames(Resource):
         except (git.exc.GitCommandError, TypeError, FileNotFoundError):
             # recreate lost gitclone folder
             try:
-                os.mkdir(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE"))
+                os.mkdir(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_REPO_PATH_TEST_CASE")))
             except FileExistsError:
                 pass
             return []
