@@ -1,13 +1,14 @@
-import React from 'react'
-import axios from "axios";
-import { confirmAlert } from 'react-confirm-alert';
+import '../../pages.css';
+import './general_settings.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import {faCog, faQuestion} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Grid from "@material-ui/core/Grid";
-import {withRouter} from "react-router";
-import "./general_settings.css";
-import "../../pages.css"
+
+import { faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Grid from '@material-ui/core/Grid';
+import axios from 'axios';
+import React from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import { withRouter } from 'react-router';
 
 require('dotenv').config();
 
@@ -15,10 +16,6 @@ class GeneralSettings extends React.Component {
 
     constructor(props) {
         super(props);
-
-        let gitRepoAddress;
-        // if (localStorage.getItem("gitRepoAddress")) {gitRepoAddress = localStorage.getItem("gitRepoAddress")}
-        // else {gitRepoAddress = ''}
 
         this.state = {
             gitRepoAddress: "",
@@ -271,6 +268,3 @@ class GeneralSettings extends React.Component {
     }
 
 export default withRouter(GeneralSettings);
-
-
-{/*action="http://localhost:5000/settings-result" method="get"*/}

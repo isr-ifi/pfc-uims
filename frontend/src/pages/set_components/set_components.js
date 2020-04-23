@@ -1,16 +1,15 @@
-import React from 'react'
+import '../../pages.css';
 
-import Settings from "./settings"
-
+import { faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
-import Async from "react-select/async/dist/react-select.browser.esm";
-import {Editors} from "react-data-grid-addons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faQuestion} from "@fortawesome/free-solid-svg-icons";
-import {confirmAlert} from "react-confirm-alert";
-import listReactFiles from 'list-react-files'
-import "../../pages.css"
-import Grid from "@material-ui/core/Grid";
+import React from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import { Editors } from 'react-data-grid-addons';
+
+import Settings from './settings';
+
 require('dotenv').config();
 const { DropDownEditor } = Editors;
 
@@ -49,7 +48,7 @@ class SetComponents extends React.Component {
             let models = [];
             // map through all models in the response. put them in the form e.g. {id: "model1", value:"Energy"}
             // and put them in a list [{id: "model1", value:"Energy"}, {...}, ...]
-            response.data.map(item => {
+            response.data.forEach(item => {
                 models.push({id: "model"+j, value: item})
             });
             // create dropdown editor for data grid
@@ -74,7 +73,7 @@ class SetComponents extends React.Component {
             let callback = [];
             // map through all models in the response. put them in the form e.g. {id: "model1", value:"Energy"}
             // and put them in a list [{id: "model1", value:"Energy"}, {...}, ...]
-            response.data.map(item => {
+            response.data.forEach(item => {
                 callback.push({id: "callback"+j, value: item})
             });
             // create dropdown editor for data grid
@@ -113,7 +112,7 @@ class SetComponents extends React.Component {
                     const components = response.data.input.components;
                     const decisionCards = response.data.input.decisionCards;
                     let finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
-                    components.map(v => {
+                    components.forEach(v => {
                         let currComp = {
                             "name": v,
                             "parameter":[],
@@ -126,7 +125,7 @@ class SetComponents extends React.Component {
                         }
                         catch (e) {}
                     });
-                    decisionCards.map(v => {
+                    decisionCards.forEach(v => {
                         let currDc = {
                             "name": v,
                             "parameter": [],
@@ -146,7 +145,7 @@ class SetComponents extends React.Component {
                 const components = response.data.input.components;
                 const decisionCards = response.data.input.decisionCards;
                 let finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
-                components.map(v => {
+                components.forEach(v => {
                     let currComp = {
                         "name": v,
                         "parameter":[],
@@ -159,7 +158,7 @@ class SetComponents extends React.Component {
                     }
                     catch (e) {}
                 });
-                decisionCards.map(v => {
+                decisionCards.forEach(v => {
                     let currDc = {
                         "name": v,
                         "parameter": [],
@@ -184,7 +183,7 @@ class SetComponents extends React.Component {
      */
     isJsonInArray(array, json) {
         let result = false;
-        array.map(v => {
+        array.forEach(v => {
             if (JSON.stringify(v) === JSON.stringify(json)) {
                 result = true;
             }
@@ -225,9 +224,6 @@ class SetComponents extends React.Component {
         if (info.length === 0) {
             return <span>Loading data...</span>
         }
-        const infoButtonStyle = {
-            marginLeft: "auto"
-        };
         return (
             <div>
                 <h1>Set Visual Components</h1>
@@ -250,16 +246,6 @@ class SetComponents extends React.Component {
                 />
             </div>);
     }
-
-
-    /*render() {
-        return (
-            <div>
-                <h1>Set Components</h1>
-                <Settings settingsInfo={this.state.info}/>
-            </div>
-        );
-    }*/
 }
 
 export default SetComponents;

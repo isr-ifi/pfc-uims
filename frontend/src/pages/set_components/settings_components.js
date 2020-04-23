@@ -1,17 +1,13 @@
-import React from 'react'
-import Grid from "@material-ui/core/Grid";
-import Select from "react-select";
-import ReactDataGrid from "react-data-grid";
-import Checkbox from "./checkbox";
-import "./settings_components.css"
-import {Editors} from "react-data-grid-addons";
-import axios from "axios";
-import "../../pages.css"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faExpandArrowsAlt, faQuestion} from "@fortawesome/free-solid-svg-icons";
-import {confirmAlert} from "react-confirm-alert";
-const { DropDownEditor } = Editors;
+import '../../pages.css';
+import './settings_components.css';
 
+import Grid from '@material-ui/core/Grid';
+import axios from 'axios';
+import React from 'react';
+import ReactDataGrid from 'react-data-grid';
+import Select from 'react-select';
+
+import Checkbox from './checkbox';
 
 class SettingsComponents extends React.Component {
     constructor(props) {
@@ -19,9 +15,7 @@ class SettingsComponents extends React.Component {
         let visComponents;
         let checkedComponents;
         let componentsDataGridRows;
-        let issueTypesDataGridComponents;
         let selectedItem;
-        let issueTypeEditorDataGridComponents;
         let componentsDataGridColumns = [
             {key: "parameter", name: "Parameter"},
             {key: "type", name: "Type"},
@@ -74,9 +68,6 @@ class SettingsComponents extends React.Component {
         if (localStorage.getItem("selectedComponents")) {selectedItem = JSON.parse(localStorage.getItem("selectedComponents"))}
         else {selectedItem = []}
 
-        // if (localStorage.getItem("componentsDataGridColumns")) {componentsDataGridColumns = JSON.parse(localStorage.getItem("componentsDataGridColumns"))}
-        // else {componentsDataGridColumns = []}
-
         if (localStorage.getItem("descriptionComponents")) {descriptionComponents = JSON.parse(localStorage.getItem("descriptionComponents"))}
         else {descriptionComponents = ""}
 
@@ -86,7 +77,7 @@ class SettingsComponents extends React.Component {
         let checkboxComponents = {};
 
         if (props.settingsInfo.components) {
-            this.props.settingsInfo.components.map((v, i) => {
+            this.props.settingsInfo.components.forEach((v, i) => {
                 checkboxComponents[v] = false
             });
         }
@@ -130,15 +121,10 @@ class SettingsComponents extends React.Component {
         catch (e) {}
         if (localStorage.getItem("checkedComponents")) {this.setState({checkedComponents: JSON.parse(localStorage.getItem("checkedComponents"))});}
         if (localStorage.getItem("componentsDataGridRows")) {this.setState({componentsDataGridRows: JSON.parse(localStorage.getItem("componentsDataGridRows"))});}
-        //if (localStorage.getItem("issueTypesDataGridComponents")) {this.setState({issueTypesDataGridComponents: JSON.parse(localStorage.getItem("issueTypesDataGridComponents"))});}
-        // if (localStorage.getItem("issueTypesDataGridDC")) {this.setState({issueTypesDataGridDc: JSON.parse(localStorage.getItem("issueTypesDataGridDC"))});}
         if (localStorage.getItem("selectedComponents")) {this.setState({selectedItemUpper: JSON.parse(localStorage.getItem("selectedComponents"))});}
-        //if (localStorage.getItem("issueTypeEditorDataGridComponents")) {this.setState({issueTypeEditorDataGridComponents: JSON.parse(localStorage.getItem("issueTypeEditorDataGridComponents"))});}
-        //if (localStorage.getItem("issueTypeEditorDataGridDc")) {this.setState({issueTypeEditorDataGridDc: JSON.parse(localStorage.getItem("issueTypeEditorDataGridDc"))});}
         if (localStorage.getItem("componentsDataGridColumns")) {this.setState({componentsDataGridColumns: JSON.parse(localStorage.getItem("componentsDataGridColumns"))});}
         if (localStorage.getItem("descriptionComponents")) {this.setState({descriptionComponents: JSON.parse(localStorage.getItem("descriptionComponents"))});}
         if (localStorage.getItem("parametersUpper")) {this.setState({parametersUpper: JSON.parse(localStorage.getItem("parametersUpper"))});}
-        //if (localStorage.getItem("dynamicDataGridColumns")) {this.setState({fullComponentsInfo: JSON.parse(localStorage.getItem("dynamicDataGridColumns"))});}
         if (localStorage.getItem("currentParameters")) {this.setState({currentParameters: JSON.parse(localStorage.getItem("currentParameters"))});}
         if (localStorage.getItem("checkboxAllChecked")) {this.setState({checkboxAllChecked: JSON.parse(localStorage.getItem("checkboxAllChecked"))});}
 
@@ -161,7 +147,7 @@ class SettingsComponents extends React.Component {
         const currCompName = currState.currComponentName;
         const finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
         const finalOutputComps = finalOutput.configuration['1'].components;
-        finalOutputComps.map(v => {
+        finalOutputComps.forEach(v => {
             if (v.name === currCompName) {
                 v.parameter = gridRows;
 
@@ -221,47 +207,21 @@ class SettingsComponents extends React.Component {
         const currCompName = currState.currComponentName;
         const finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
         const finalOutputComps = finalOutput.configuration['1'].components;
-        let comp_index = 0;
-        finalOutputComps.map(v => {
+        finalOutputComps.forEach(v => {
             if (v.name === currCompName) {
                 v.parameter = gridRows;
-                //this.setState({"currentParameters": v.parameter});
                 localStorage.setItem("currentParameters", JSON.stringify(v.parameter));
-                let parameters = v.parameter;
 
-                let param_index = 0;
-                v.parameter.map(dependentParameter => {
-                    if (dependentParameter.type === "dependent") {
-                        let match = dependentParameter.parameter.match(/(.*?)--(.*?)--(.*)/);
-                        try {
-                            const dependentParameterOriginalName = match['1'];
-                            const dependentParameterName = match[2];
-                            const dependentParameterNodePath = match[3];
-
-                            v.parameter.map(dynamicParameter => {
-                                if (dependentParameterName === dynamicParameter.parameter && dynamicParameter.type !== "dependent") {
-
-                                    const newSource = dynamicParameter.value;
-                                    const apiRequest = {"new_source": newSource, "node_path": dependentParameterNodePath};
-                                    const response = this.getValueFromSource(apiRequest, parameters, param_index, v.name,
-                                        finalOutputComps, finalOutput, gridRows, comp_index);
-                                }
-                            })
-                        }
-                        catch (e) {}
-                    }
-                    param_index++;
+                v.parameter.forEach(() => {
                     v.parameter = JSON.parse(localStorage.getItem("currentParameters"));
                 });
 
                 // also update the overall parameters
                 let selectedParameters = this.state.parametersUpper;
-                //selectedParameters[v.name] = gridRows;
                 selectedParameters[v.name] = JSON.parse(localStorage.getItem("currentParameters"));
                 this.setState({parametersUpper: selectedParameters});
                 localStorage.setItem("parametersUpper", JSON.stringify(selectedParameters))
             }
-            comp_index++;
         });
         finalOutput.configuration['1'].components = finalOutputComps;
 
@@ -275,15 +235,11 @@ class SettingsComponents extends React.Component {
     async getValueFromSource(source_json, currentParameters, index_parameter, currentName, finalOutputComps, finalOutput, gridRows, index_comp) {
         await axios.post(process.env.REACT_APP_GET_VALUE, source_json, {headers: {'Content-Type': 'application/json'}})
             .then(response => {
-                //this.setState({"currentDependentValue": response.data.value});
                 currentParameters[index_parameter].value = response.data.value;
-                //this.setState({"currentParameters": currentParameters});
                 localStorage.setItem("currentParameters", JSON.stringify(currentParameters));
-
 
                 // also update the overall parameters
                 let selectedParameters = this.state.parametersUpper;
-                //selectedParameters[v.name] = gridRows;
                 selectedParameters[currentName] = JSON.parse(localStorage.getItem("currentParameters"));
                 this.setState({parametersUpper: selectedParameters});
                 localStorage.setItem("parametersUpper", JSON.stringify(selectedParameters));
@@ -346,12 +302,10 @@ class SettingsComponents extends React.Component {
         let selectedComponent = this.findSelected(selectedItemUpper.label, this.props.settingsInfo.componentsParameters);
 
         // set current stats and store them in local storage
-        const currStats = {};
         this.setState({
             currComponentName: selectedItemUpper.label,
             currParameters: selectedComponent.rows,
         });
-        // let parameters = JSON.parse(localStorage.getItem("parametersUpper"));
         let parameters = this.state.parametersUpper;
 
         let localCurrStats;
@@ -363,7 +317,6 @@ class SettingsComponents extends React.Component {
         }
 
         localCurrStats.currComponentName = selectedItemUpper.label;
-        // localCurrStats.currParameters = selectedComponent.rows;
         localCurrStats.currParameters = parameters[selectedItemUpper.label];
         localStorage.setItem("currentStats", JSON.stringify(localCurrStats));
 
@@ -383,56 +336,12 @@ class SettingsComponents extends React.Component {
         this.setState({issueTypesDataGridComponents: selectedComponent.issueTypes});
         this.setState({descriptionComponents: selectedComponent.description});
 
-        // this.setState({issueTypeEditorDataGridComponents: <DropDownEditor options={["test", "test2", "test3"]}/>});
-        // let dropdown = <DropDownEditor options={["test", "test2", "test3"]}/>
-
-        // const parameter = selectedComponent.rows;
-        // let gridContent = [];
-        // let i;
-        // let dropDownFound = false;
-        // for (i = 0; i < parameter.length; i++) {
-        //     let currParam = parameter[i];
-        //     if (currParam.type === "dynamic") {
-        //         this.setState({
-        //             componentsDataGridColumns: [
-        //                 {key: "parameter", name: "Parameter"},
-        //                 {key: "type", name: "Type"},
-        //                 {key: "value", name: "Value", editable: true}]
-        //         });
-        //         dropDownFound = true;
-        //         return
-        //     }
-        // }
-        // if (!dropDownFound) {
-        //     this.setState({
-        //         componentsDataGridColumns: [
-        //             {key: "parameter", name: "Parameter"},
-        //             {key: "type", name: "Type"},
-        //             {key: "value", name: "Value", editable: true}]
-        //     });
-        // }
-
-        // this.setState({
-        //     componentsDataGridColumns: [
-        //         {key: "parameter", name: "Parameter"},
-        //         {key: "type", name: "Type"},
-        //         {key: "value", name: "Value", editable: true}]
-        // });
-
         //Fixme: do not use this.state.whatever in the updateLocalStorage
         // better define onle the values you need in the separate function with the original values!
 
         localStorage.setItem("issueTypesDataGridComponents", JSON.stringify(selectedComponent.issueTypes));
         localStorage.setItem("selectedComponents", JSON.stringify(selectedItemUpper));
-        // localStorage.setItem("componentsDataGridColumns", JSON.stringify([
-        //     {key: "parameter", name: "Parameter"},
-        //     {key: "type", name: "Type"},
-        //     {key: "value", name: "Value", editable: true}]));
         localStorage.setItem("descriptionComponents", JSON.stringify(selectedComponent.description));
-    };
-
-    onDataGridCellExpand = subRowOptions => {
-        let test = subRowOptions;
     };
 
     /**
@@ -491,13 +400,10 @@ class SettingsComponents extends React.Component {
             this.setState({componentsDataGridRows: []});
             this.setState({issueTypesDataGridComponents: []});
             this.setState({descriptionComponents: ""});
-            //this.setState({issueTypeEditorDataGridComponents: null});
-            // this.setState({componentsDataGridColumns: []});
 
             localStorage.setItem("componentsDataGridRows", JSON.stringify([]));
             localStorage.setItem("issueTypesDataGridComponents", JSON.stringify([]));
             localStorage.setItem("selectedComponents", JSON.stringify([]));
-            //localStorage.setItem("componentsDataGridColumns", JSON.stringify([]));
             localStorage.setItem("descriptionComponents", JSON.stringify(""));
 
             if(checkedItems.length === 0) {localStorage.setItem("SelectedLayout", JSON.stringify({lg: []}))}
@@ -517,14 +423,12 @@ class SettingsComponents extends React.Component {
      * @param prevLayoutY       layout y-coordinate of previous visual component
      */
     updateFinaleOutputWhenCheckboxIsCheckedAndReturnLayoutWidthAndY(component, index, checkedValue, prevLayoutHeight, prevLayoutY) {
-        //let checked = this.state.vis_components[v] === false;
-
         // set in final output the checked state of the component
         const finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
         const finalOutputComps = finalOutput.configuration['1'].components;
 
         // add checked state to final output
-        finalOutputComps.map(v => {
+        finalOutputComps.forEach(v => {
             if (v.name === component) {
                 v.enabled = checkedValue;
 
@@ -550,8 +454,6 @@ class SettingsComponents extends React.Component {
         finalOutput.configuration['1'].components = finalOutputComps;
         localStorage.setItem("fullComponentsInfo", JSON.stringify(finalOutput));
 
-        //dict[name] = (checkedValue);
-
         let layout;
         let toolbox;
         if (JSON.parse(localStorage.getItem("SelectedLayout")) && JSON.parse(localStorage.getItem("toolbox"))) {
@@ -573,9 +475,9 @@ class SettingsComponents extends React.Component {
                     layout[j] = {};
                 }
             }
-            //layout[index] = {
             let layoutAlreadyInList = false;
-            layout.map(item => {
+
+            layout.forEach(item => {
                 if (item.i === index.toString()) {
                     layoutAlreadyInList = true;
                 }
@@ -634,7 +536,7 @@ class SettingsComponents extends React.Component {
         let updatedComponents = {};
         let currLayoutHeight = 0;
         let currLayoutY = 0;
-        Object.keys(this.state.vis_components).map((comp, i) => {
+        Object.keys(this.state.vis_components).forEach((comp, i) => {
             let newLayoutHeightAndY = this.updateFinaleOutputWhenCheckboxIsCheckedAndReturnLayoutWidthAndY(
                 comp, i, checkedValue, currLayoutHeight, currLayoutY);
             // extract previously used width and y-coordinate which are used to position the next component
@@ -657,7 +559,7 @@ class SettingsComponents extends React.Component {
         let updatedComponent = {};
         let currLayoutHeight = 0;
         let currLayoutY = 0;
-        Object.keys(this.state.vis_components).map((v, i) => {
+        Object.keys(this.state.vis_components).forEach((v, i) => {
             if (v === name) {
                 let newLayoutHeightAndY = this.updateFinaleOutputWhenCheckboxIsCheckedAndReturnLayoutWidthAndY(
                     name, i, checkedValue, currLayoutHeight, currLayoutY);
@@ -684,18 +586,6 @@ class SettingsComponents extends React.Component {
      * @param changeEvent
      */
     handleCheckboxChangeComponents = changeEvent => {
-        // const {name} = changeEvent.target;
-        //
-        // let dict = {};
-        // Object.keys(this.state.vis_components).map((v, i) => {
-        //     if (v === name) {
-        //
-        //     }
-        //     else {
-        //         dict[v] = this.state.vis_components[v]
-        //     }
-        // });
-
         const {name} = changeEvent.target;
         const checkedValue = this.state.vis_components[name] === false;
         this.checkboxEvent(name, checkedValue);
@@ -708,7 +598,6 @@ class SettingsComponents extends React.Component {
      * @param event
      */
     handleAllChecked = (event) => {
-        const dcs = this.state.vis_components; // components is in the form {comp1: true,  comp2: false, comp3: true}
         let checkValue;
 
         // get check state of checked all checkbox and alter state of all other checkboxes accordingly
@@ -749,7 +638,7 @@ class SettingsComponents extends React.Component {
      */
     getDynamicComponentsDataGridRows(fullDataGridRows) {
         let dynamicDataGridRows = [];
-        fullDataGridRows.map(item => {
+        fullDataGridRows.forEach(item => {
             if (item.type === "dynamic") {
                 dynamicDataGridRows.push(item)
             }
@@ -765,7 +654,7 @@ class SettingsComponents extends React.Component {
      */
     getNonDynamicComponentsDataGridRows(fullDataGridRows) {
         let nonDynamicDataGridRows = [];
-        fullDataGridRows.map(item => {
+        fullDataGridRows.forEach(item => {
             if (item.type !== "dynamic" && item.type !== "dependent" && item.type !== 'callback') {
                 nonDynamicDataGridRows.push(item)
             }
@@ -781,7 +670,7 @@ class SettingsComponents extends React.Component {
      */
     getDependentComponentsDataGridRows(fullDataGridRows) {
         let dependentDataGridRows = [];
-        fullDataGridRows.map(item => {
+        fullDataGridRows.forEach(item => {
             if (item.type === "dependent") {
                 dependentDataGridRows.push(item)
             }
@@ -797,7 +686,7 @@ class SettingsComponents extends React.Component {
      */
     getCallbackComponentsDataGridRows(fullDataGridRows) {
         let callbackDataGridRows = [];
-        fullDataGridRows.map(item => {
+        fullDataGridRows.forEach(item => {
             if (item.type === 'callback') {
                 callbackDataGridRows.push(item)
             }
@@ -847,12 +736,6 @@ class SettingsComponents extends React.Component {
                         </div>
                     </div>
                 </Grid>
-                {/*<Grid xs={2}>
-                    <div>
-                        <h4>Description</h4>
-                        <div> {this.state.descriptionComponents} </div>
-                    </div>
-                </Grid>*/}
                 <Grid item xs={6}>
                     <div id="non-dynamic-data-grid">
                         <ReactDataGrid

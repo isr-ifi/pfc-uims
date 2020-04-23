@@ -1,27 +1,16 @@
-import React from 'react'
+import '../../../node_modules/react-resizable/css/styles.css';
+import '../../pages.css';
+import 'react-grid-layout/css/styles.css';
 
-import "react-grid-layout/css/styles.css";
-import "../../../node_modules/react-resizable/css/styles.css";
-import { Responsive, WidthProvider } from 'react-grid-layout';
-import VisualComponentsLayout from "./visual_components_layout";
-import styled from "styled-components";
-import axios from "axios";
-import {confirmAlert} from "react-confirm-alert";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faQuestion} from "@fortawesome/free-solid-svg-icons";
-import "../../pages.css"
+import { faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
+import React from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+
+import VisualComponentsLayout from './visual_components_layout';
+
 require('dotenv').config();
-
-const ResponsiveGridLayout = WidthProvider(Responsive);
-
-const Main = styled.main`
-    position: relative;
-    overflow: hidden;
-    transition: all .15s;
-    padding: 0 20px;
-    margin-left: margin-left: ${props => (props.expanded ? 240 : 64)}px;;
-    margin-top: 100px
-`;
 
 class ArrangeComponents extends React.Component {
 
@@ -114,25 +103,5 @@ class ArrangeComponents extends React.Component {
         );
     }
 }
-
-
-// const ArrangeComponents = ({ children }) => (
-//     <div>
-//         <h1>Arrange Components</h1>
-//         <Container fluid style={{ lineHeight: '32px' }}>
-//             <Row >
-//                 <Col >1 of 2</Col>
-//                 <Col >2 of 2</Col>
-//             </Row>
-//             <br />
-//             <Row >
-//                 <Col >1 of 3</Col>
-//                 <Col >2 of 3</Col>
-//                 <Col >3 of 3</Col>
-//             </Row>
-//         </Container>
-//         <div>{children}</div>
-//     </div>
-// );
 
 export default ArrangeComponents

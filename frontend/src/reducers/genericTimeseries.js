@@ -1,7 +1,6 @@
 // File taken from Patrick Zurmühle's project: https://github.com/kavengo/post_fossil_cities_visualizations
 
 let initialState = {};
-
 let counter = 0;
 
 const genericTimeseriesReducer = (state = initialState, action) => {
@@ -9,9 +8,7 @@ const genericTimeseriesReducer = (state = initialState, action) => {
     counter +=1;
 
     switch (action.type) {
-
         case 'GENERIC_TIMESERIES_UPDATE':
-
             var id              = action.payload.id;
 
             // Update state if id exists
@@ -36,12 +33,11 @@ const genericTimeseriesReducer = (state = initialState, action) => {
                 }
 
             }
+            break;
 
         default:
             return state;
-
     }
 };
-
 
 export default genericTimeseriesReducer

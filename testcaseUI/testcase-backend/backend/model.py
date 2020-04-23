@@ -231,11 +231,9 @@ def get_value_from_data(input_or_output_file, filename, value_origin_tree_notes)
     """
     try:
         if input_or_output_file == "in":
-            data_file = open(os.path.dirname(os.path.abspath(__file__)) + os.getenv(
-                "LOCAL_DEMO_DATA_PATH_IN") + "/" + filename + ".json", "r")
+            data_file = open(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_DEMO_DATA_PATH_IN") + "/" + filename + ".json", "r"))
         else:
-            data_file = open(os.path.dirname(os.path.abspath(__file__)) + os.getenv(
-                "LOCAL_DEMO_DATA_PATH_OUT") + "/" + filename + ".json", "r")
+            data_file = open(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_DEMO_DATA_PATH_OUT") + "/" + filename + ".json", "r"))
         data = json.load(data_file)
     except FileNotFoundError:
         data = {}

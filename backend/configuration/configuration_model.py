@@ -3,6 +3,9 @@ import re
 import shutil
 import sys
 from os.path import isfile, join
+import stat
+from os import path
+from pathlib import Path
 
 from git import Repo
 import os
@@ -82,6 +85,11 @@ class GitRepo:
                 # if git repo in local repo path is not the same repo as given in the clone url
                 if not current_clone_url == clone_url:
                     # remove all files form folder and clone new git repo from given clone url
+                    for root, dirs, files in os.walk(self.local_repo_path):
+                        for d in dirs:
+                            os.chmod(path.join(root, d), stat.S_IRWXU)
+                        for f in files:
+                            os.chmod(path.join(root, f), stat.S_IRWXU)
                     shutil.rmtree(self.local_repo_path)
                     clone_git_repo(clone_url, self.local_repo_path)
                 # else:
@@ -280,13 +288,11 @@ def open_data_file(input_or_output_file, filename, local_data_in_env_string, loc
     """
     try:
         if input_or_output_file == "in":
-            file_path = os.path.dirname(os.path.abspath(__file__)) + os.getenv(
-                local_data_in_env_string)
-            data_file = open(file_path + "/" + filename + ".json", "r")
+            file_path = Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_data_in_env_string))
+            data_file = open(Path(file_path + "/" + filename + ".json"), "r")
         else:
-            file_path = os.path.dirname(os.path.abspath(__file__)) + os.getenv(
-                local_data_out_env_string)
-            data_file = open(file_path + "/" + filename + ".json", "r")
+            file_path = Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv(local_data_out_env_string))
+            data_file = open(Path(file_path + "/" + filename + ".json"), "r")
         data_file_converted = json.load(data_file)
         data_file.close()
         return data_file_converted

@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from .configuration_model import GitRepo, is_new_pull_available, pull_from_remote, find_js_files, \
     get_decision_cards, get_all_model_names, get_value_from_data, get_value_from_origin_name
@@ -10,8 +11,8 @@ def get_model_names():
 
     :return:
     """
-    input_models = get_all_model_names(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_DEMO_DATA_PATH_IN"))
-    output_models = get_all_model_names(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_DEMO_DATA_PATH_OUT"))
+    input_models = get_all_model_names(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_DEMO_DATA_PATH_IN")))
+    output_models = get_all_model_names(Path(os.path.dirname(os.path.abspath(__file__)) + os.getenv("LOCAL_DEMO_DATA_PATH_OUT")))
     all_models = input_models + output_models
     return all_models
 

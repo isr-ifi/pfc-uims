@@ -1,10 +1,12 @@
-import React from 'react'
-import ReactDataGrid from "react-data-grid";
-import Grid from "@material-ui/core/Grid";
-import Select from "react-select";
-import Checkbox from "./checkbox";
-import './settings_components.css'
-import "../../pages.css"
+import '../../pages.css';
+import './settings_components.css';
+
+import Grid from '@material-ui/core/Grid';
+import React from 'react';
+import ReactDataGrid from 'react-data-grid';
+import Select from 'react-select';
+
+import Checkbox from './checkbox';
 
 class SettingsDecisionCards extends React.Component {
 
@@ -14,8 +16,6 @@ class SettingsDecisionCards extends React.Component {
         let decisionCards;
         let checkedDc;
         let dcDataGridRows;
-        let issueTypesDataGridDc;
-        let issueTypeEditorDataGridDc;
         let dcDataGridColumns = [
             {key: "parameter", name: "Parameter"},
             {key: "type", name: "Type"},
@@ -76,14 +76,9 @@ class SettingsDecisionCards extends React.Component {
         if (localStorage.getItem("dcDataGridRows")) {dcDataGridRows = JSON.parse(localStorage.getItem("dcDataGridRows"))}
         else {dcDataGridRows = []}
 
-
-
-        // if (localStorage.getItem("dcDataGridColumns")) {dcDataGridColumns = JSON.parse(localStorage.getItem("dcDataGridColumns"))}
-        // else {dcDataGridColumns = []}
-
         let checkboxDecisionCards = {};
         if (props.settingsInfo.decisionCards) {
-            this.props.settingsInfo.decisionCards.map((v, i) => {
+            this.props.settingsInfo.decisionCards.forEach((v, i) => {
                 checkboxDecisionCards[v] = false
             });
         }
@@ -162,36 +157,10 @@ class SettingsDecisionCards extends React.Component {
      * @param selectedItemLower selected item in the selection. In the form {label:"name", value: -1}
      */
     getSelectedDcInput = selectedItemLower => {
-        // this.setState({selectedItemLower: selectedItemLower});
-        // let selectedDc = this.findSelected(selectedItemLower.label, this.props.settingsInfo.decisionCardsParameters);
-        // this.setState({dcDataGridRows: selectedDc.rows});
-        // this.setState({issueTypesDataGridDc: selectedDc.issueTypes});
-        // this.setState({descriptionDc: selectedDc.description});
-        // //this.setState({issueTypeEditorDataGridDc: <DropDownEditor options={this.state.issueTypesDataGridDc}/>});
-        // // let dropdown = <DropDownEditor options={selectedDc.issueTypes}/>
-        //
-        // this.setState({
-        //     dcDataGridColumns: [
-        //         {key: "parameter", name: "Parameter"},
-        //         {key: "type", name: "Type"},
-        //         {key: "value", name: "Value", editable: true}]
-        // });
-        //
-        //
-        // localStorage.setItem("issueTypesDataGridDC", JSON.stringify(selectedDc.issueTypes));
-        // localStorage.setItem("selectedDc", JSON.stringify(selectedItemLower));
-        // localStorage.setItem("dcDataGridColumns", JSON.stringify([
-        //     {key: "parameter", name: "Parameter"},
-        //     {key: "type", name: "Type"},
-        //     {key: "value", name: "Value", editable: true}]));
-        // localStorage.setItem("dcDataGridRows", JSON.stringify(selectedDc.rows));
-        // localStorage.setItem("descriptionDc", JSON.stringify(selectedDc.description));
-
         this.setState({selectedItemLower: selectedItemLower});
         let selectedDecisionCards = this.findSelected(selectedItemLower.label, this.props.settingsInfo.decisionCardsParameters);
 
         // set current stats and store them in local storage
-        const currStats = {};
         this.setState({
             currDcName: selectedItemLower.label,
             currParametersDc: selectedDecisionCards.rows,
@@ -270,7 +239,6 @@ class SettingsDecisionCards extends React.Component {
      * @param event
      */
     handleAllChecked = (event) => {
-        const dcs = this.state.decision_cards; // dcs is in the form {dc1: true,  dc2: false, dc3: true}
         let checkValue;
 
         // get check state of checked all checkbox and alter state of all other checkboxes accordingly
@@ -307,7 +275,7 @@ class SettingsDecisionCards extends React.Component {
      */
     checkAllEvent(checkedValue) {
         let updatedDecisionCards = {};
-        Object.keys(this.state.decision_cards).map((dc, i) => {
+        Object.keys(this.state.decision_cards).forEach((dc, i) => {
             this.updateFinaleOutputWhenCheckboxIsChecked(dc, i, checkedValue);
             updatedDecisionCards[dc] = (checkedValue);
         });
@@ -323,7 +291,7 @@ class SettingsDecisionCards extends React.Component {
     checkboxEvent(name, checkedValue) {
 
         let updatedDecisionCards = {};
-        Object.keys(this.state.decision_cards).map((v, i) => {
+        Object.keys(this.state.decision_cards).forEach((v, i) => {
             if (v === name) {
                 this.updateFinaleOutputWhenCheckboxIsChecked(name, i, checkedValue);
                 updatedDecisionCards[name] = (checkedValue);
@@ -384,7 +352,7 @@ class SettingsDecisionCards extends React.Component {
         const finalOutputDc = finalOutput.configuration["1"].decisionCards;
 
         // add checked state to final output
-        finalOutputDc.map(v => {
+        finalOutputDc.forEach(v => {
             if (v.name === decisionCard) {
                 v.enabled = checkedValue;
                 // if there is no previous parameters set in final output, take the default parameters from api response
@@ -424,7 +392,7 @@ class SettingsDecisionCards extends React.Component {
         const currDcName = currState.currDcName;
         const finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
         const finalOutputDc = finalOutput.configuration["1"].decisionCards;
-        finalOutputDc.map(v => {
+        finalOutputDc.forEach(v => {
             if (v.name === currDcName) {
                 v.parameter = gridRows;
 
@@ -452,38 +420,11 @@ class SettingsDecisionCards extends React.Component {
         const currCompName = currState.currDcName;
         const finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
         const finalOutputComps = finalOutput.configuration['1'].decisionCards;
-        let comp_index = 0;
-        finalOutputComps.map(v => {
+        finalOutputComps.forEach(v => {
             if (v.name === currCompName) {
                 v.parameter = gridRows;
                 //this.setState({"currentParametersDc": v.parameter});
                 localStorage.setItem("currentParametersDc", JSON.stringify(v.parameter));
-                let parameters = v.parameter;
-
-                // let param_index = 0;
-                // v.parameter.map(dependentParameter => {
-                //     if (dependentParameter.type === "dependent") {
-                //         let match = dependentParameter.parameter.match(/(.*?)--(.*?)--(.*)/);
-                //         try {
-                //             const dependentParameterOriginalName = match['1'];
-                //             const dependentParameterName = match[2];
-                //             const dependentParameterNodePath = match[3];
-                //
-                //             v.parameter.map(dynamicParameter => {
-                //                 if (dependentParameterName === dynamicParameter.parameter && dynamicParameter.type !== "dependent") {
-                //
-                //                     const newSource = dynamicParameter.value;
-                //                     const apiRequest = {"new_source": newSource, "node_path": dependentParameterNodePath};
-                //                     const response = this.getValueFromSource(apiRequest, parameters, param_index, v.name,
-                //                         finalOutputComps, finalOutput, gridRows, comp_index);
-                //                 }
-                //             })
-                //         }
-                //         catch (e) {}
-                //     }
-                //     param_index++;
-                //     v.parameter = JSON.parse(localStorage.getItem("currentParametersDc"));
-                // });
 
                 // also update the overall parameters
                 let selectedParameters = this.state.parametersLower;
@@ -492,7 +433,6 @@ class SettingsDecisionCards extends React.Component {
                 this.setState({parametersLower: selectedParameters});
                 localStorage.setItem("parametersLower", JSON.stringify(selectedParameters))
             }
-            comp_index++;
         });
         finalOutput.configuration['1'].decisionCards = finalOutputComps;
 
@@ -528,7 +468,7 @@ class SettingsDecisionCards extends React.Component {
      */
     getNonDynamicDecisionCardsDataGridRows(fullDataGridRows) {
         let nonDynamicDataGridRows = [];
-        fullDataGridRows.map(item => {
+        fullDataGridRows.forEach(item => {
             if (item.type !== "dynamic" && item.type !== "dependent" && item.type !== 'callback') {
                 nonDynamicDataGridRows.push(item)
             }
@@ -544,7 +484,7 @@ class SettingsDecisionCards extends React.Component {
      */
     getDynamicDecisionCardsDataGridRows(fullDataGridRows) {
         let dynamicDataGridRows = [];
-        fullDataGridRows.map(item => {
+        fullDataGridRows.forEach(item => {
             if (item.type === "dynamic") {
                 dynamicDataGridRows.push(item)
             }
@@ -560,7 +500,7 @@ class SettingsDecisionCards extends React.Component {
      */
     getDependentDecisionCardsDataGridRows(fullDataGridRows) {
         let dependentDataGridRows = [];
-        fullDataGridRows.map(item => {
+        fullDataGridRows.forEach(item => {
             if (item.type === "dependent") {
                 dependentDataGridRows.push(item)
             }
@@ -576,7 +516,7 @@ class SettingsDecisionCards extends React.Component {
      */
     getCallbackDecisionCardsDataGridRows(fullDataGridRows) {
         let callbackDataGridRows = [];
-        fullDataGridRows.map(item => {
+        fullDataGridRows.forEach(item => {
             if (item.type === 'callback') {
                 callbackDataGridRows.push(item)
             }
