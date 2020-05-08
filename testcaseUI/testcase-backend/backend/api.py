@@ -19,7 +19,7 @@ ROOT_DIR = os.path.abspath(os.curdir)
 app = Flask(__name__)
 app.config.from_mapping(
     SECRET_KEY='dev',
-    DATABASE=os.path.join(ROOT_DIR, '/backend/instance/configuration-system.sqlite'),
+    DATABASE=Path(ROOT_DIR + '/backend/instance/configuration-system.sqlite'),
 )
 api = Api(app)
 CORS(app)
@@ -29,8 +29,8 @@ init_app(app)
 
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect(
-            ROOT_DIR + "/backend/instance/configuration-system.sqlite")
+        g.db = sqlite3.connect(Path(os.path.dirname(os.path.abspath(__file__)) +
+                             '/../../../backend/instance/configuration-system.sqlite'))
         g.db.row_factory = sqlite3.Row
 
     return g.db
