@@ -349,7 +349,7 @@ class SettingsDecisionCards extends React.Component {
     updateFinaleOutputWhenCheckboxIsChecked(decisionCard, index, checkedValue) {
         // set in final output the checked state of the component
         const finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
-        const finalOutputDc = finalOutput.configuration["1"].decisionCards;
+        const finalOutputDc = finalOutput.gameConfiguration["1"].decisionCards;
 
         // add checked state to final output
         finalOutputDc.forEach(v => {
@@ -371,7 +371,7 @@ class SettingsDecisionCards extends React.Component {
                 }
             }
         });
-        finalOutput.configuration["1"].decisionCards = finalOutputDc;
+        finalOutput.gameConfiguration["1"].decisionCards = finalOutputDc;
         localStorage.setItem("fullComponentsInfo", JSON.stringify(finalOutput));
     }
 
@@ -403,7 +403,7 @@ class SettingsDecisionCards extends React.Component {
                 localStorage.setItem("parametersLower", JSON.stringify(selectedParameters))
             }
         });
-        finalOutput.configuration["1"].decisionCards = finalOutputDc;
+        finalOutput.gameConfiguration["1"].decisionCards = finalOutputDc;
         localStorage.setItem("fullComponentsInfo", JSON.stringify(finalOutput));
 
         this.setState({dcDataGridRows: gridRows});
@@ -419,7 +419,7 @@ class SettingsDecisionCards extends React.Component {
         localStorage.setItem("currentStatsDc", JSON.stringify(currState));
         const currCompName = currState.currDcName;
         const finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
-        const finalOutputComps = finalOutput.configuration['1'].decisionCards;
+        const finalOutputComps = finalOutput.gameConfiguration['1'].decisionCards;
         finalOutputComps.forEach(v => {
             if (v.name === currCompName) {
                 v.parameter = gridRows;
@@ -434,7 +434,7 @@ class SettingsDecisionCards extends React.Component {
                 localStorage.setItem("parametersLower", JSON.stringify(selectedParameters))
             }
         });
-        finalOutput.configuration['1'].decisionCards = finalOutputComps;
+        finalOutput.gameConfiguration['1'].decisionCards = finalOutputComps;
 
         localStorage.setItem("fullComponentsInfo", JSON.stringify(finalOutput));
 

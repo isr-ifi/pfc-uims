@@ -70,7 +70,7 @@ class GeneralSettings extends React.Component {
                     //alert('Git Repo was successfully updated');
                     this.message('Success!', 'Git Repo was successfully updated');
                     localStorage.clear();
-                    localStorage.setItem("fullComponentsInfo", JSON.stringify({configuration: {'1':{components:[], decisionCards:[], gitRepository: this.state.gitRepoAddress}}}));
+                    localStorage.setItem("fullComponentsInfo", JSON.stringify({gameConfiguration: {'1':{views: {'1': {components:[]}}, decisionCards:[], gitRepository: this.state.gitRepoAddress}}}));
 
                 }
                 else {

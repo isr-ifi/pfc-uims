@@ -478,9 +478,11 @@ class ComponentsInfoFromFrontend(Resource):
 
     def post(self):
         frontend_request = request.get_json()
-        configuration = frontend_request.get("configuration")
+        configuration = frontend_request.get("gameConfiguration")
         current_configuration = configuration.get("1")
-        components = current_configuration.get("components")
+        views = current_configuration.get("views")
+        current_view = views.get("1")
+        components = current_view.get("components")
         decision_cards = current_configuration.get("decisionCards")
 
         database = get_db()

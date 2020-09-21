@@ -146,7 +146,7 @@ class SettingsComponents extends React.Component {
         localStorage.setItem("currentStats", JSON.stringify(currState));
         const currCompName = currState.currComponentName;
         const finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
-        const finalOutputComps = finalOutput.configuration['1'].components;
+        const finalOutputComps = finalOutput.gameConfiguration['1'].views['1'].components;
         finalOutputComps.forEach(v => {
             if (v.name === currCompName) {
                 v.parameter = gridRows;
@@ -158,7 +158,7 @@ class SettingsComponents extends React.Component {
                 localStorage.setItem("parametersUpper", JSON.stringify(selectedParameters))
             }
         });
-        finalOutput.configuration['1'].components = finalOutputComps;
+        finalOutput.gameConfiguration['1'].views['1'].components = finalOutputComps;
         localStorage.setItem("fullComponentsInfo", JSON.stringify(finalOutput));
 
         this.setState({componentsDataGridRows: gridRows});
@@ -206,7 +206,7 @@ class SettingsComponents extends React.Component {
         localStorage.setItem("currentStats", JSON.stringify(currState));
         const currCompName = currState.currComponentName;
         const finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
-        const finalOutputComps = finalOutput.configuration['1'].components;
+        const finalOutputComps = finalOutput.gameConfiguration['1'].views['1'].components;
         finalOutputComps.forEach(v => {
             if (v.name === currCompName) {
                 v.parameter = gridRows;
@@ -223,7 +223,7 @@ class SettingsComponents extends React.Component {
                 localStorage.setItem("parametersUpper", JSON.stringify(selectedParameters))
             }
         });
-        finalOutput.configuration['1'].components = finalOutputComps;
+        finalOutput.gameConfiguration['1'].views['1'].components = finalOutputComps;
 
         localStorage.setItem("fullComponentsInfo", JSON.stringify(finalOutput));
 
@@ -246,7 +246,7 @@ class SettingsComponents extends React.Component {
 
                 finalOutputComps[index_comp].parameter = JSON.parse(localStorage.getItem("currentParameters"));
 
-                finalOutput.configuration['1'].components = finalOutputComps;
+                finalOutput.gameConfiguration['1'].views['1'].components = finalOutputComps;
 
                 localStorage.setItem("fullComponentsInfo", JSON.stringify(finalOutput));
 
@@ -425,7 +425,7 @@ class SettingsComponents extends React.Component {
     updateFinaleOutputWhenCheckboxIsCheckedAndReturnLayoutWidthAndY(component, index, checkedValue, prevLayoutHeight, prevLayoutY) {
         // set in final output the checked state of the component
         const finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
-        const finalOutputComps = finalOutput.configuration['1'].components;
+        const finalOutputComps = finalOutput.gameConfiguration['1'].views['1'].components;
 
         // add checked state to final output
         finalOutputComps.forEach(v => {
@@ -451,7 +451,7 @@ class SettingsComponents extends React.Component {
                 v.toolbox = false;
             }
         });
-        finalOutput.configuration['1'].components = finalOutputComps;
+        finalOutput.gameConfiguration['1'].views['1'].components = finalOutputComps;
         localStorage.setItem("fullComponentsInfo", JSON.stringify(finalOutput));
 
         let layout;

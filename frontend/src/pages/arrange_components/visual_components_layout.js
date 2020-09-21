@@ -108,7 +108,7 @@ class VisualComponentsLayout extends React.PureComponent {
                 // fill final output with layout information
                 const visCompName = JSON.parse(localStorage.getItem("apiResponse")).componentsParameters[compIndex].name;
                 let finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
-                const finalOutputComps = finalOutput.configuration['1'].components;
+                const finalOutputComps = finalOutput.gameConfiguration['1'].views['1'].components;
                 finalOutputComps.forEach(v => {
                     if (v.name === visCompName) {
                         v.position = {
@@ -117,11 +117,11 @@ class VisualComponentsLayout extends React.PureComponent {
                         }
                     }
                 });
-                finalOutput.configuration['1'].components = finalOutputComps;
+                finalOutput.gameConfiguration['1'].views['1'].components = finalOutputComps;
                 localStorage.setItem("fullComponentsInfo", JSON.stringify(finalOutput));
 
                 // create dynamic props from parameters
-                const visCompParameters = finalOutput.configuration['1'].components[compIndex].parameter;
+                const visCompParameters = finalOutput.gameConfiguration['1'].views['1'].components[compIndex].parameter;
                 let dynamicProps = {};
                 visCompParameters.forEach(parameter => {
                     let value = '';
@@ -271,13 +271,13 @@ class VisualComponentsLayout extends React.PureComponent {
         // fill final output with layout information
         const visCompName = JSON.parse(localStorage.getItem("apiResponse")).componentsParameters[parseInt(item.i, 10)].name;
         let finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
-        const finalOutputComps = finalOutput.configuration["1"].components;
+        const finalOutputComps = finalOutput.gameConfiguration["1"].views['1'].components;
         finalOutputComps.forEach(v => {
             if (v.name === visCompName) {
                 v.toolbox = false;
             }
         });
-        finalOutput.configuration["1"].components = finalOutputComps;
+        finalOutput.gameConfiguration["1"].views['1'].components = finalOutputComps;
         localStorage.setItem("fullComponentsInfo", JSON.stringify(finalOutput));
     };
 
@@ -309,13 +309,13 @@ class VisualComponentsLayout extends React.PureComponent {
         // fill final output with layout information
         const visCompName = JSON.parse(localStorage.getItem("apiResponse")).componentsParameters[parseInt(item.i, 10)].name;
         let finalOutput = JSON.parse(localStorage.getItem("fullComponentsInfo"));
-        const finalOutputComps = finalOutput.configuration["1"].components;
+        const finalOutputComps = finalOutput.gameConfiguration["1"].views['1'].components;
         finalOutputComps.forEach(v => {
             if (v.name === visCompName) {
                 v.toolbox = true;
             }
         });
-        finalOutput.configuration["1"].components = finalOutputComps;
+        finalOutput.gameConfiguration["1"].views['1'].components = finalOutputComps;
         localStorage.setItem("fullComponentsInfo", JSON.stringify(finalOutput));
 
     };

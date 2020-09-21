@@ -106,7 +106,7 @@ class SetComponents extends React.Component {
                     localStorage.clear();
                     localStorage.setItem("apiResponse", JSON.stringify(response.data.input));
                     // make a new entry for the final output after erasing everything
-                    localStorage.setItem("fullComponentsInfo", JSON.stringify({configuration:{1:{components:[], decisionCards:[]}}}));
+                    localStorage.setItem("fullComponentsInfo", JSON.stringify({gameConfiguration:{1:{views: {1: {components:[]}}, decisionCards:[]}}}));
 
                     // fill final output with infos
                     const components = response.data.input.components;
@@ -121,7 +121,7 @@ class SetComponents extends React.Component {
                             "toolbox": false
                         };
                         try {
-                            finalOutput.configuration['1'].components.push(currComp);
+                            finalOutput.gameConfiguration['1'].views['1'].components.push(currComp);
                         }
                         catch (e) {}
                     });
@@ -132,7 +132,7 @@ class SetComponents extends React.Component {
                             "enabled": false
                         };
                         try {
-                            finalOutput.configuration['1'].decisionCards.push(currDc);
+                            finalOutput.gameConfiguration['1'].decisionCards.push(currDc);
                         }
                         catch (e) {}
                     });
@@ -154,7 +154,7 @@ class SetComponents extends React.Component {
                         "toolbox": false
                     };
                     try {
-                        finalOutput.configuration['1'].components.push(currComp);
+                        finalOutput.gameConfiguration['1'].views['1'].components.push(currComp);
                     }
                     catch (e) {}
                 });
@@ -165,7 +165,7 @@ class SetComponents extends React.Component {
                         "enabled": false
                     };
                     try {
-                        finalOutput.configuration['1'].decisionCards.push(currDc);
+                        finalOutput.gameConfiguration['1'].decisionCards.push(currDc);
                     }
                     catch (e) {}
                 });

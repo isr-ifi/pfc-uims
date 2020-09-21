@@ -217,7 +217,7 @@ class WebPage extends React.Component {
     componentDidMount() {
         // create a local storage for the final output, layout and toolbox if none already exists
         if (!localStorage.getItem("fullComponentsInfo")) {
-            localStorage.setItem("fullComponentsInfo", JSON.stringify({configuration:{components:[], decisionCards:[]}}))
+            localStorage.setItem("fullComponentsInfo", JSON.stringify({gameConfiguration:{views:{}, decisionCards:[]}}))
         }
         if (!localStorage.getItem("SelectedLayout")) {
             localStorage.setItem("SelectedLayout", JSON.stringify({lg: []}));

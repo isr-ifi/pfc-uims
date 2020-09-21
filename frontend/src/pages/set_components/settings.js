@@ -46,7 +46,7 @@ class Settings extends React.Component {
         }
         if (localStorage.getItem('fullComponentsInfo')){finalComponentsInfo = JSON.parse(localStorage.getItem('fullComponentsInfo'))}
         else {
-            localStorage.setItem('fullComponentsInfo', JSON.stringify({configuration:{'1':{components:[], decisionCards:[]}}}));
+            localStorage.setItem('fullComponentsInfo', JSON.stringify({gameConfiguration:{'1':{views: {'1': {components:[]}} , decisionCards:[]}}}));
             finalComponentsInfo = {}
         }
 
